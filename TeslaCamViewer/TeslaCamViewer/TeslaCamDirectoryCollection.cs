@@ -42,7 +42,16 @@ namespace TeslaCamViewer
                 baseCollection.BuildFromDirectory(Directory);
                 this.Events.Add(baseCollection);
             }
-            this.Events = new ObservableCollection<TeslaCamEventCollection>(Events.OrderBy(e => e.StartDate.UTCDateString));
+
+            if (this.Events == null ||
+                this.Events.Count == 0)
+                return;
+
+            this.Events =
+                new ObservableCollection<TeslaCamEventCollection>(
+                    Events
+                    .OrderBy(e => e?.StartDate?.UTCDateString));
+
             this.DisplayName = new System.IO.DirectoryInfo(Directory).Name;
         }
     }
