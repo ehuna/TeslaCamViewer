@@ -27,7 +27,7 @@ namespace TeslaCamViewer
                 var recording = Recordings.FirstOrDefault();
 
                 if (recording == default(TeslaCamFileSet))
-                    return new TeslaCamFile("");
+                    return new TeslaCamFile("", "");
 
                 return recording.ThumbnailVideo;
             }
@@ -38,10 +38,10 @@ namespace TeslaCamViewer
             this.Recordings = new List<TeslaCamFileSet>();
         }
 
-        public bool BuildFromDirectory(string Directory)
+        public bool BuildFromDirectory(string directory)
         {
             // Get list of raw files
-            var files = System.IO.Directory.GetFiles(Directory, "*.mp4").OrderBy(x=>x).ToArray();
+            var files = System.IO.Directory.GetFiles(directory, "*.mp4").OrderBy(x=>x).ToArray();
 
             // Make sure there's at least one valid file
             if (files.Length < 1) { return false; }
@@ -54,7 +54,8 @@ namespace TeslaCamViewer
             {
                 try
                 {
-                    var teslaCamFile = new TeslaCamFile(file);
+                    var teslaCamFile = new TeslaCamFile(directory, file);
+
                     teslaCamFileList.Add(teslaCamFile);
                 }
                 catch (Exception ex)
@@ -69,11 +70,12 @@ namespace TeslaCamViewer
             // Find the files that match the distinct event
             foreach (var CurrentEvent in DistinctEvents)
             {
-                List<TeslaCamFile> MatchedFiles = teslaCamFileList.Where(e => e.Date.UTCDateString == CurrentEvent).ToList();
-                TeslaCamFileSet CurrentFileSet = new TeslaCamFileSet();
+                var teslaCamFileListMatched = teslaCamFileList.Where(e => e.Date.UTCDateString == CurrentEvent).ToList();
+                var currentFileSet = new TeslaCamFileSet();
 
-                CurrentFileSet.SetCollection(MatchedFiles);
-                this.Recordings.Add(CurrentFileSet);
+                currentFileSet.SetCollection(teslaCamFileListMatched);
+
+                this.Recordings.Add(currentFileSet);
             }
 
             if (this.Recordings.Count == 0)

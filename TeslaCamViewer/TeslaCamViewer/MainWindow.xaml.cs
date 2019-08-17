@@ -41,17 +41,17 @@ namespace TeslaCamViewer
             {
                 if (cam.CameraLocation == TeslaCamFile.CameraType.FRONT)
                 {
-                    this.front.Source = new Uri(cam.FilePath);
+                    this.front.Source = new Uri(cam.FilePathFull);
                     playFront = true;
                 }
                 if (cam.CameraLocation == TeslaCamFile.CameraType.LEFT_REPEATER)
                 {
-                    this.left.Source = new Uri(cam.FilePath);
+                    this.left.Source = new Uri(cam.FilePathFull);
                     playLeft = true;
                 }
                 if (cam.CameraLocation == TeslaCamFile.CameraType.RIGHT_REPEATER)
                 {
-                    this.right.Source = new Uri(cam.FilePath);
+                    this.right.Source = new Uri(cam.FilePathFull);
                     playRight = true;
                 }
             }

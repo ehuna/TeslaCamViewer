@@ -18,25 +18,32 @@ namespace TeslaCamViewer
             FRONT,
             RIGHT_REPEATER
         }
-        private readonly string FileNameRegex = "[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[a-z]*.mp4";
-        public string FilePath { get; private set; }
-        public string FileName { get { return System.IO.Path.GetFileName(FilePath); } }
+
+        // private readonly string FileNameRegex = "[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[a-z]*.mp4";
+
+        public string FilePathFull { get; private set; }
+
+        public string FileName { get { return System.IO.Path.GetFileName(FilePathFull); } }
+
         public TeslaCamDate Date { get; private set; }
+
         public CameraType CameraLocation { get; private set; }
-        public string FileDirectory { get { return System.IO.Path.GetDirectoryName(FilePath); } }
-        public Uri FileURI { get { return new Uri(this.FilePath); } }
+
+        public string FileDirectory { get { return System.IO.Path.GetDirectoryName(FilePathFull); } }
+
+        public Uri FileURI { get { return new Uri(this.FilePathFull); } }
 
         // D:\TeslaCam\RecentClips\2019-08-15_20-10-57-front.mp4
         // 2019-08-15_20-10-57-front.mp4
 
-        public TeslaCamFile(string FilePath)
+        public TeslaCamFile(string directory, string filePathFull)
         {
-            this.FilePath = FilePath;
+            this.FilePathFull = filePathFull;
 
             var fileName = 
-                    FilePath
-                    .Replace(@"D:\TeslaCam\RecentClips\", "")
-                    .Replace(@"D:\TeslaCam\SavedClips\", "");
+                    filePathFull
+                    .Replace(directory, "")
+                    .Replace(@"\", "");
 
             var date = fileName.Substring(0, 10);
             var time = fileName.Substring(11, 8);
